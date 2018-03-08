@@ -9,21 +9,59 @@
 body{
 	font-family: sans-serif;
 	display: grid;
-	grid-template-rows: 57px fit-content fit-content(100vh) 57px;
+	grid-template-rows: 57px fit-content fit-content fit-content(100vh) 57px;
 }
 
+.learning{
+  display: grid;
+  background-color: #e79433;
+  grid-template-columns: repeat(5, 20%);
+}
+
+.learning img{
+  display: block;
+  height: 300px;
+  padding: 1em;
+  justify-self: center;
+}
+
+.learning .first{
+  color:white;
+  align-self: flex-start;
+  justify-self: center;
+  font-size: 3em;
+  padding: 25px;
+}
+
+.learning .last{
+  color:white;
+  align-self: flex-end;
+  justify-self: center;
+  font-size: 3em; 
+  padding: 25px;
+}
+
+.learning .loading{
+  color:white;
+  align-self: center;
+  justify-self: center;
+  font-size: 3em; 
+  padding: 25px;
+}
 header{
-	background-color: #e79433;
-		display: grid;
-		grid-template-rows: fit-content(57px) fit-content(57px);
+  background-color: #e79433;
+  display: grid;
+  grid-template-rows: fit-content(57px) fit-content(57px);
+  justify-content: space-between;
 }
 
 #logo{
 	color: #e79433;
 	background-color: #EFEFEF;
-	font-weight: bolder;
-	margin-left: 0;
-	font-size: 1.4em;
+  font-weight: bolder;
+  width: 100vw;
+  margin-left: 0;
+	font-size: 1.5em;
 	padding: 15px;
 	display: inline-block;
 }
@@ -33,18 +71,18 @@ header{
 		background-color: #e79433;
 		display: grid;
 		grid-template-columns: fit-content(20%) auto;
-		grid-template-rows: fit-content(57px);
 	}
 
 	#logo{
 		color: #e79433;
 		background-color: #EFEFEF;
 		font-weight: bolder;
-		margin-left: 30px;
+    margin-left: 30px;
+    width: 100%;
 		font-size: 1.4em;
 		padding: 15px;
 		display: inline-block;
-	}
+  }
 }
 
 header ul{
@@ -68,7 +106,7 @@ header ul li a {
 .hero{
 	display: grid;
 	grid-template-columns: fit-content(25%) auto auto auto;
-    background-color: #EFEFEF;
+  background-color: #EFEFEF;
 	height: 300px;
 
 	
@@ -77,15 +115,61 @@ header ul li a {
 @media(max-width: 768px){
 	.hero{
 		display: grid;
-		grid-template-columns: 10% auto;
-	}
+  }
+  
+  .hero #img{
+    display: relative;
+    margin-left: -200px;
+    height: 280px;
+  }
 	.hero #img1{
 		display: none;
 	}
 
 	.hero #img2{
 		display: none;
-	}
+  }
+
+  header ul li a {
+    text-decoration: none;
+    padding: .85em;
+    font-size: 1em;
+  }
+
+  .hero h1{
+    letter-spacing: 1em;
+    font-size: .85em;
+  }
+
+  .learning{
+    display: grid;
+    background-color: #e79433;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 100px);
+  }
+  
+  .learning img{
+    display: block;
+    height: 100px;
+    padding: 1em;
+    justify-self: center;
+  }
+  
+  .learning .first{
+    color:white;
+    align-self: flex-start;
+    justify-self: center;
+    font-size: 1.5em;
+    padding: 25px;
+  }
+  
+  .learning .last{
+    color:white;
+    align-self: flex-end;
+    justify-self: center;
+    font-size: 1.5em; 
+    padding: 25px;
+  }
 }
 
 .hero h1{
@@ -94,7 +178,7 @@ header ul li a {
 	left: 3em;
 	background-color: #e79433;
 	color: white /*#FFFBC5*/;
-	letter-spacing: 1.3em;
+	letter-spacing: 1.4em;
 	padding: 1em 0 1em 1em;
 	align-self: center;
 }
@@ -234,6 +318,7 @@ header ul li a {
   display: inline;
   background: rgb(255,255,255);
   font-weight: 600;
+  font-size: .85em;
   z-index: 15;
   padding: 6px 10px;
   text-align: left;
@@ -307,8 +392,7 @@ header ul li a {
 	list-style-type: square;
 }
 
-.desc_list{
-	background: rgb(231, 148, 51,);
+.desc_list{ 
 	border-radius: 5px;
 	font-size: .75em;
 }
