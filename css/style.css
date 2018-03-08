@@ -19,24 +19,35 @@ body{
 }
 
 .learning img{
+  display: block;
   height: 300px;
   padding: 1em;
+  justify-self: center;
 }
 
 .learning .first{
   color:white;
   align-self: flex-start;
   justify-self: center;
-  font-size: 3.5em;
+  font-size: 3em;
+  padding: 25px;
 }
 
 .learning .last{
   color:white;
   align-self: flex-end;
   justify-self: center;
-  font-size: 3.5em; 
+  font-size: 3em; 
+  padding: 25px;
 }
 
+.learning .loading{
+  color:white;
+  align-self: center;
+  justify-self: center;
+  font-size: 3em; 
+  padding: 25px;
+}
 header{
   background-color: #e79433;
   display: grid;
@@ -95,7 +106,7 @@ header ul li a {
 .hero{
 	display: grid;
 	grid-template-columns: fit-content(25%) auto auto auto;
-    background-color: #EFEFEF;
+  background-color: #EFEFEF;
 	height: 300px;
 
 	
@@ -128,6 +139,36 @@ header ul li a {
   .hero h1{
     letter-spacing: 1em;
     font-size: .85em;
+  }
+
+  .learning{
+    display: grid;
+    background-color: #e79433;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(5, 100px);
+  }
+  
+  .learning img{
+    display: block;
+    height: 100px;
+    padding: 1em;
+    justify-self: center;
+  }
+  
+  .learning .first{
+    color:white;
+    align-self: flex-start;
+    justify-self: center;
+    font-size: 1.5em;
+    padding: 25px;
+  }
+  
+  .learning .last{
+    color:white;
+    align-self: flex-end;
+    justify-self: center;
+    font-size: 1.5em; 
+    padding: 25px;
   }
 }
 
