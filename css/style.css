@@ -48,11 +48,13 @@ body{
   font-size: 3em; 
   padding: 25px;
 }
+
 header{
   background-color: #e79433;
   display: grid;
-  grid-template-rows: fit-content(57px) fit-content(57px);
+  grid-template-rows: fit-content(57px) repeat(2. 57px);
   justify-content: space-between;
+  width: 100vw;
 }
 
 #logo{
@@ -70,7 +72,9 @@ header{
 	header {
 		background-color: #e79433;
 		display: grid;
-		grid-template-columns: fit-content(20%) auto;
+    grid-template-columns: fit-content(20%) auto;
+    width: 100vw;
+    
 	}
 
 	#logo{
@@ -91,25 +95,32 @@ header ul{
 }
 
 header ul li {
-	display: inline;
+	display: inline-block;
 }
 
 header ul li a {
-	text-decoration: none;
+  text-decoration: none;
+  margin: auto 0;
 	padding: 1em;
 	color: white;
 	font-weight: bold;
-	align-self: center;
+	align-content: flex-end;
 	font-size: 1.1em;
 }
 
 .hero{
 	display: grid;
-	grid-template-columns: fit-content(25%) auto auto auto;
+	grid-template-columns: fit-content(1131%) auto auto auto;
   background-color: #EFEFEF;
 	height: 300px;
 
 	
+}
+
+@media(max-width: 1420px){
+  .hero #img2{
+    display: none;
+  }
 }
 
 @media(max-width: 768px){
@@ -128,6 +139,14 @@ header ul li a {
 
 	.hero #img2{
 		display: none;
+  }
+
+  header{
+    display: grid;
+    grid-template-rows: fit-content(57px) repeat(2, 23px);
+    grid-template-columns: 50% 50%;
+    width: 100vw;
+
   }
 
   header ul li a {
@@ -186,7 +205,7 @@ header ul li a {
 .main {
 	margin: 0;
 	padding: 0;
-	background: rgb(230,230,230);
+	background: #EFEFEF;
 	color: rgb(50,50,50);
 	font-family: 'Open Sans', sans-serif;
 	font-size: 112.5%;
