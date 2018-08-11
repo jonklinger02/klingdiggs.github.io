@@ -6,12 +6,25 @@ var UIController = (function() {
         inputDescription: '.add__description',
         inputDate: '.add__date',
         incomeContainer: '.income__list',
-        expenseContainer: '.expense__list'
+        expenseContainer: '.expense__list',
+        calendarContainer: '.calendar',
+        container: '.transaction__container',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expenseLabel: '.budget__expenses--value',
+        //percentageLabel: '.budget__expenses--percentage',
+        deleteBtn: '.item__delete--btn',
     }
 
     var monthArr = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     var weekArr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+    var appDate ={
+        month: '8',
+        day: '01',
+        year: '2018'
+    };
 
     var week = {
         one: [],
@@ -34,6 +47,10 @@ var UIController = (function() {
         October: 31,
         November: 30,
         December: 31
+    };
+
+    var getAppDate = function() {
+        
     };
 
     var weekOne = function(day, monthNumber){
@@ -68,7 +85,7 @@ var UIController = (function() {
                 if (element > 7) {
                     html += '<td class="prev-month">' + element + '</td>';
                 } else {
-                    html += '<td>' + element + '</td>';
+                    html += '<td class="" id="' + element + '">' + element + '</td>';
                 }
             });
             
@@ -76,7 +93,7 @@ var UIController = (function() {
             return html ;            
     };
 
-    var addWeek = function(today, thisWeek, lastWeek) {
+    var addWeek = function(thisWeek, lastWeek) {
 
         var html;
         html = '';
@@ -84,18 +101,73 @@ var UIController = (function() {
         for(var i = 0; i < 7; i++) {
             var e = 1;
             thisWeek.push(lastWeek[6] + e + i);
-            if(today === thisWeek[i]) {
-                html += '<td class="current-day">' + thisWeek[i] + '</td>';
-            } else {
-                html += '<td>' + thisWeek[i] + '</td>';
-            }
+            html += '<td class="" id="' + (lastWeek[6] + e + i) + '">' + thisWeek[i] + '</td>';
+            
         }
         
-        console.log(week.two);
+
         html += '</tr><tr>';
-        console.log(html);
         return html;
     };
+
+    updateCurrentDate = function(currentDate) {
+        var selector;
+        selector =  currentDate;
+
+        document.getElementById(selector).classList.toggle('current-day');
+    }; 
+    
+
+    var finalWeek = function(startDate, monthNumber) {
+        var html, e, stop, element;
+        html = '';
+        e = 0;
+        stop = month[monthArr[monthNumber]];
+
+        for(var i = (startDate + 1); i <= stop; i++) {
+            week.five.push(i);
+            html += '<td class="" id="' + (week.five[e]) + '">' + week.five[e] + '</td>';
+            e++;
+        }
+
+        element = 7 - week.five.length;
+        if(element > 0){
+            for(var i = week.five.length; i < 7; i++) {
+            week.five.push(element);
+            html += '<td class="next-month">' + element + '</td>';
+            }
+        }
+
+        html += '</tr></tbody></table>';
+
+        return html;
+    };
+
+    var formatNumber = function(number, type) {
+        /* +/- depending on type
+        exactly 2 decimal points
+        comma separating thousands
+        2310.4654 -> 2310.46
+        2000 -> 2,000 */
+        var numSplit, int, decimal;
+
+        number = Math.abs(number);
+        number = number.toFixed(2);
+
+        numSplit = number.split('.');
+
+        int = numSplit[0];
+        decimal = numSplit[1];
+
+        if (int.length > 6 ){
+            int = int.substr(0, int.length - 6 ) + '\,' + int.substr(int.length - 6, 6);
+        } else if (int.length > 3){
+            int = int.substr(0, int.length - 3 ) + '\,' + int.substr(int.length - 3, 3);
+        }
+
+        return (type === 'income' ? '+' : '-') + ' '  + int + '.' + decimal;
+    };
+
 
     return {
 
@@ -139,24 +211,23 @@ var UIController = (function() {
             document.querySelector(element).insertAdjacentHTML('beforeend', html);
         },
 
-        initCalendar: function (date) {
+        updateCalendar: function (date) {
             var currentDate, currentDay, currentMonth, currentYear, startDate, html;
 
             currentDate = date.getDate();
-            currentDay = date.getDay();
             currentMonth = date.getMonth();
             currentYear = date.getFullYear();
 
             startDate = new Date( currentYear + '-' + (currentMonth+1) + '-01');
 
             // make header
-            html = '<div class="cal_header"><a href="#">&lt;</a><h2>%month%</h2><h2>%year%</h2><a href="#">&gt;</a></div><table><thead><tr><td>Sun</td><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td></tr></thead><tbody><tr>';
+            html = '<div class="cal_header"><a href="#">&lt;</a><h2>  %month%</h2><h2> %year%  </h2><a href="#">  &gt;</a></div><table><thead><tr><td>Sun</td><td>Mon</td><td>Tue</td><td>Wed</td><td>Thu</td><td>Fri</td><td>Sat</td></tr></thead><tbody><tr>';
 
             html = html.replace('%month%', monthArr[currentMonth]);
             html = html.replace('%year%', (currentYear.toString()));
 
             // make week 1 html
-            html += weekOne(currentDay, currentMonth);
+            html += weekOne(startDate.getDay(), currentMonth);
 
             // make weeks 2-4 html
             for(var i = 2; i < 5; i++){
@@ -171,14 +242,30 @@ var UIController = (function() {
                     thisWeek = week.four;
                     lastWeek = week.three;
                 }
-                html += addWeek(currentDate, thisWeek, lastWeek);
+                html += addWeek(thisWeek, lastWeek);
             }
             // make week 5 html
+            html += finalWeek(week.four[6], currentMonth);
+            element = DOMStrings.calendarContainer;
+            document.querySelector(element).insertAdjacentHTML('beforeend', html);
 
-
-
+            updateCurrentDate(currentDate);
 
         },
+
+        displayBudget: function(obj) {
+
+            var type;
+
+            obj.budget > 0 ? type = 'income' :  type = 'expense';
+
+            console.log(obj.budget);
+            document.querySelector(DOMStrings.budgetLabel).textContent = formatNumber(obj.budget, type);
+            //document.querySelector(DOMStrings.expenseLabel).textContent = formatNumber(obj.totalExp, type);
+            //document.querySelector(DOMStrings.incomeLabel).textContent = formatNumber(obj.totalInc, type);
+        },
+
+
         getInput: function() {
             return {
                 type: document.querySelector(DOMStrings.inputType).value,
@@ -212,17 +299,50 @@ var budgetController = (function() {
         this.id = id;
         this.description = description;
         this.value = value;
-        this.date = date;
+        this.date = date.getDate;
+        this.month = date.getMonth;
+        this.year = date.getFullYear;
     };
 
     var Expense = function(id, description, value, date){
         this.id = id;
         this.description = description;
         this.value = value;
-        this.date = date;
+        this.date = date.getDate;
+        this.month = date.getMonth;
+        this.year = date.getFullYear;
+    };
+
+    var calculateTotal = function(type) {
+        var sum = 0;
+
+        data.allItems[type].forEach( function(element){
+            sum += element.value;
+        });
+
+        data.totals[type] = sum
     };
 
     return {
+
+        calculateBudget: function(){
+            // calculate total income and expenses
+            calculateTotal('income');
+            calculateTotal('expense');
+
+            // calc budget: income - expenses
+            data.budget = data.totals.income - data.totals.expense;
+        },
+
+        getBudget: function(){
+            return {
+                budget: data.budget,
+                totalInc: data.totals.income,
+                totalExp: data.totals.expense,
+                percentage: data.percentage
+            }
+        },
+
         addItem: function(type, description, value, date){
             var id, dataArr, newItem;
 
@@ -244,9 +364,6 @@ var budgetController = (function() {
 
             return newItem;
         }
-
-
-
     }
 }) ();
 
@@ -254,8 +371,6 @@ var controller = (function(budgetCtrl, UICtrl) {
 
     // 1. intialize with init function
     var DOM = UICtrl.getDOMStrings();
-
-
 
     // 2. add events/budget items
     var setupEventListener = function() {
@@ -266,6 +381,21 @@ var controller = (function(budgetCtrl, UICtrl) {
                 ctrlAddItem();
             }
         });
+        //document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem);
+    };
+
+    var updateBudget = function() {
+        var budget;
+
+        // calculate budget
+        budgetCtrl.calculateBudget();
+    
+        // return the budget
+        budget = budgetCtrl.getBudget();
+
+        // display budget on UI
+        console.log(budget);
+        UICtrl.displayBudget(budget);
     };
 
     var ctrlAddItem = function() {
@@ -286,12 +416,12 @@ var controller = (function(budgetCtrl, UICtrl) {
             UICtrl.clearFields();
 
         }
-
-    }
-
     // 3. update budget
+    updateBudget();
 
     // 4. update UI
+
+    }
 
     // Initialize
     return {
@@ -303,7 +433,7 @@ var controller = (function(budgetCtrl, UICtrl) {
 
             // initialize calendar
             var today = new Date(Date.now());
-            UICtrl.initCalendar(today);
+            UICtrl.updateCalendar(today);
 
             // initialize budget
 
